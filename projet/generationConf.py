@@ -1,7 +1,5 @@
 import json, os
 
-
-
 #LECTURE DE L'INTENT FILE
 
 #Récupération de l'intent file
@@ -71,8 +69,8 @@ for router in routers:
 
     #Interface de Loopback
     res.write("interface Loopback0\n"
-              f" ipv4 address {id}.{id}.{id}.{id}/32\n"
-              " ipv4 enable\n")
+              f" ip address {id}.{id}.{id}.{id}/32\n"
+              " ip enable\n")
     if(igp == "ospf"):
         res.write(f" ipv4 ospf {ospfProcess} area 0\n") # MODIF utiliser OSPFV2
     res.write("!\n")
@@ -102,7 +100,7 @@ for router in routers:
                 if link["protocol-type"] == "igp":
                     dicoSousRes[As] += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = dicoSousRes[As], dicoSousRes[As]           
-                    ip += (str(dicoSousRes[As]) + "::" + str(id)) # MODIF
+                    ip += (str(dicoSousRes[As]) + "." + str(id))
                 else:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
@@ -111,23 +109,19 @@ for router in routers:
                     ip += str(compteurLienAS) + "::1" # MODIF           
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
-                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::" + str(id)) # MODIF
+                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(id))
                 else:
-                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::1" 
+                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::1" # MODIF
                     neighborsAddressList.append([neighborAddress,neighbourAs])
-                    ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::2"
+                    ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::2" # MODIF
             
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
-            # utilisation d'un masque /64 pour les liens IGP et /96 pour les liens EGP
             res.write(f"interface {link['interface']}\n"
                       " no ip address\n")
           
-            res.write(f" ipv4 address {ip}/30\n")
-            
-            
-            res.write(" ipv4 enable\n")
+            res.write(f" ip address {ip} 255.255.255.252\n")
 
-            #Gestion des différences OSPF/RIP
+            #OSPF
             if igp == "ospf":
                 res.write(f" ipv6 ospf {ospfProcess} area 0\n") # MODIF
                 if link["protocol-type"] == "egp":
@@ -141,8 +135,7 @@ for router in routers:
     #EGP
     res.write(f"router bgp {As}\n"
               f" bgp router-id {id}.{id}.{id}.{id}\n"
-              " bgp log-neighbor-changes\n"
-              " no bgp default ipv4-unicast\n") # MODIF virer dernière ligne ?
+              " bgp log-neighbor-changes\n")
     
     #Ajout des voisins IGP
     for router in routers:
@@ -159,11 +152,10 @@ for router in routers:
             asNeighb = egpNeighborsAddress[1]
             res.write(f" neighbor {ipNeighb} remote-as {asNeighb}\n")
     
-    res.write(
-              " address-family ipv4\n") # MODIF vérif commande ajout unicast ?
+    res.write(" address-family ipv4\n")
 
     #Annonce du préfixe de l'AS et donc de tous les sous-réseaux de l'AS
-    res.write(f"  network {asPrefix[As]}:/48\n") # MODIF
+    res.write(f"  network {asPrefix[As]}0.0\n")
 
     #On active les loopbacks des autres routeurs de l'AS
     for router in routers:
@@ -173,17 +165,15 @@ for router in routers:
                 res.write(f"  neighbor {routerID}.{routerID}.{routerID}.{routerID} activate\n")
     
     if isASBR:
-        
         #Pour chaque voisin EGP
         for egpNeighborsAddress in neighborsAddressList:
             res.write(f"  neighbor {egpNeighborsAddress[0]} activate\n")
-            
-
     
     res.write(" exit-address-family\n")
 
     if isASBR:
         res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n") # MODIF
+    
     # IGP
                   
     if(igp == "ospf"):
