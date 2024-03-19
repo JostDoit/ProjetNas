@@ -1,0 +1,40 @@
+Conf t
+!
+!
+!
+!
+Ip as-path access-list 10 deny  _100$
+!
+ip bgp-community new-format
+!
+ip community-list standard peer-peer permit 64518:100
+!
+!
+!
+!
+!
+route-map BlockRoutePeer permit 10
+!
+!
+match as-path 10
+!
+match community 64518:100
+!
+set community 64518:100
+!
+!
+End
+!
+Conf t
+!
+!
+Router bgp 64518
+!
+!
+Address-family ipv6 unicast
+!
+!
+neighbor 2001:100:7:4::11 route-map BlockRoutePeer out
+!
+!
+End

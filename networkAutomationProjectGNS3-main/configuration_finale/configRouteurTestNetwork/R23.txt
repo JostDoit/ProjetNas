@@ -1,0 +1,26 @@
+enable
+conf t
+interface Loopback0
+ ipv6 address 23::23/128
+ ipv6 enable
+ ipv6 rip ripng enable
+!
+interface GigabitEthernet1/0
+ no ip address
+ ipv6 address 2001:100:1:1::23/64
+ ipv6 enable
+ ipv6 rip ripng enable
+!
+router bgp 64513
+ bgp router-id 23.23.23.23
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 1::1 remote-as 64513
+ neighbor 1::1 update-source Loopback0
+ address-family ipv6
+  network 2001:100:1::/48
+  neighbor 1::1 activate
+ exit-address-family
+ipv6 router rip ripng
+ redistribute connected
+!

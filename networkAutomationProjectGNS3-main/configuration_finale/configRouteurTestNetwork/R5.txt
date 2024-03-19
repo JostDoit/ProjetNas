@@ -1,0 +1,68 @@
+enable
+conf t
+interface Loopback0
+ ipv6 address 5::5/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet3/0
+ no ip address
+ ipv6 address 2001:101:3::2/96
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet2/0
+ no ip address
+ ipv6 address 2001:100:6:1::5/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet1/0
+ no ip address
+ ipv6 address 2001:100:6:2::5/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+router bgp 64518
+ bgp router-id 5.5.5.5
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 6::6 remote-as 64518
+ neighbor 6::6 update-source Loopback0
+ neighbor 7::7 remote-as 64518
+ neighbor 7::7 update-source Loopback0
+ neighbor 8::8 remote-as 64518
+ neighbor 8::8 update-source Loopback0
+ neighbor 2001:101:3::1 remote-as 64515
+ address-family ipv6
+  network 2001:100:6::/48
+  neighbor 6::6 activate
+  neighbor 7::7 activate
+  neighbor 8::8 activate
+  neighbor 2001:101:3::1 activate
+  neighbor 2001:101:3::1 route-map customer in
+ exit-address-family
+ip bgp-community new-format
+ip community-list standard blockPeerPeer permit 64518:100
+ip as-path access-list 10 deny _100$
+!
+ipv6 route 2001:100:6::/48 Null0
+ipv6 router ospf 1
+ router-id 5.5.5.5
+ passive-interface GigabitEthernet3/0
+!
+route-map customer permit 10
+ set local-preference 200
+!
+route-map peer permit 10
+ set local-preference 100
+!
+route-map provider permit 10
+ set local-preference 50
+!
+route-map BlockRoutePeer permit 10
+ match as-path 10
+ match community 64518:100
+ set community 64518:100
+!
+!

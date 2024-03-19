@@ -1,0 +1,148 @@
+# BGP Policies
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Comprendre l’attribut « Community » : "https://www.expertcisco.fr/bgp/bgp-community-attribute"
+https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/28784-bgp-community.html
+https://bgp.guru/2016/02/12/filtering-with-bgp-communities/
+
+
+
+
+_________________________________________________________
+
+
+
+
+
+
+
+
+Rappel du TP : 
+
+- Créer une ACL : --> variable
+conf t
+ipv6 access-list <nameACL>
+{permit/deny} <ipv6-source-prefix> <ipv6-dst-prefix>
+
+- Créer route-map : 
+conf t
+route-map <map-tag> {permit/deny} <seq number>
+match ipv6 address <nameACL>
+(ne pas oublier qu'il y a un deny implixite, alors mettre une règle comme dans un firewall qui si aucun n'est matché laisse passer --> même nom dans le <map-tag>)
+route-map <map-tag> permit 50 (//allow all)
+
+conf t
+router bgp 64501
+address-familly ipv6 unicast
+neighbor <ipv6-address> route-map <map-tag> {in/out} //en général il faut mettre l'adresse de son voisin, dépend de la situation
+
+
+
+
+
+
+
+_________________________________________________________
+
+
+
+
+
+
+
+
+
+Pour vérifier que l'attribut "community" existe : show ip bgp 1.0.0.0 (en ipv4) <--> (en ipv6) show ipv6 bgp <ipv6-address>
+Il existe 4 communautés BGP bien connues que vous pouvez utiliser ou vous pouvez choisir une valeur numérique que vous pouvez utiliser pour vos propres politiques : 
+- Internet : annoncez le préfixe à tous les voisins BGP. 
+- No-Advertise : n’annoncez le préfixe à aucun voisin BGP. 
+- No-Export : n'annoncez le préfixe à aucun voisin eBGP. 
+- Local-AS : n'annoncez pas le préfixe en dehors du sous-AS (celui-ci est utilisé pour les confédérations BGP).
+=> par défaut aucun n'est utilisé
+
+Une communauté est un groupe de préfixes qui doivent être traités de la même manière. 
+Par exemple, vous avez peut-être 100 préfixes qui nécessitent the same local preference or weight. 
+Vous pouvez faire correspondre tous les préfixes à l'aide d'une liste d'accès ou d'une liste de préfixes, mais l'utilisation des communautés BGP est plus pratique. 
+Au lieu de sélectionner manuellement les préfixes, un FAI pourrait demander à ses clients d'étiqueter les préfixes avec une certaine communauté BGP. 
+Lorsque le client fait cela, ses préfixes bénéficient d'un certain traitement.
+
+
+Si un client de niveau 3 marque ses préfixes avec 3356:90, il définira la préférence locale sur 90. --> 3356:90   - set local preference to 90
+Si vous le marquez avec 64983:0, il ajoutera trois fois le numéro AS à tous ses voisins BGP en Europe. --> 64983:0   - prepend 3x    to all EU peers
+les 16 premiers bits sont utilisés pour indiquer le numéro AS à l'origine de la communauté, les 16 bits suivants sont attribués par l'AS
+The first 16 bits is their AS number (3356) and the next 16 bits (70, 80 and 90) corresponds with the local preference value
+
+
+
+
+
+****** no-advertise ---> configuré sur R1 alors R2 pourra voir les community mises en place en faisant : show ipv6 bgp <ipv6-address>
+access-list 1 permit 1.0.0.0 0.255.255.255
+!
+route-map TEST permit 10
+ match ip address 1
+ set community no-advertise
+!
+route-map TEST permit 20
+!
+router bgp 100
+ no synchronization
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ network 1.0.0.0
+ neighbor 10.1.12.2 remote-as 2300
+ neighbor 10.1.12.2 send-community
+ neighbor 10.1.12.2 route-map TEST out
+ no auto-summary
+******
+
+
+
+_________________________________________________________
+
+
+
+
+
+
+### Tagger les routes reçues par ses voisins eBGP en utilisiant les "communities" (commande community) : Learn how to tag routes received from eBGP neighbours with communities
+Idées : 
+- 
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

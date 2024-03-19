@@ -1,0 +1,55 @@
+Feb 01 09:00:02.234 HYPERVISOR: Release 0.2.23-amd64/Linux (tag 2023010200)
+Feb 01 09:00:02.234 HYPERVISOR: Started on IP = 127.0.0.1, TCP port = 37577.
+Feb 01 09:00:02.243 HYPERVISOR: exec_cmd: hypervisor version 
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips 
+Feb 01 09:00:02.244 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/ac77d5cb-6260-474b-b6d3-67bf71c0b646 
+Feb 01 09:00:02.244 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/ac77d5cb-6260-474b-b6d3-67bf71c0b646
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: vm create R14 14 c7200 
+Feb 01 09:00:02.244 VM: VM R14 created.
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: vm set_con_tcp_port R14 5017 
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: c7200 get_mac_addr R14 
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: vm slot_add_binding R14 0 0 C7200-IO-FE 
+Feb 01 09:00:02.244 HYPERVISOR: exec_cmd: vm set_disk0 R14 0 
+Feb 01 09:00:02.245 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.245 HYPERVISOR: exec_cmd: vm set_idle_pc R14 0x0 
+Feb 01 09:00:02.245 HYPERVISOR: exec_cmd: vm set_ios R14 /root/GNS3/images/IOS/c7200-advipservicesk9-mz.152-4.S5.image 
+Feb 01 09:00:02.245 HYPERVISOR: exec_cmd: c7200 set_mac_addr R14 ca0e.2c08.0000 
+Feb 01 09:00:02.245 HYPERVISOR: exec_cmd: vm set_nvram R14 512 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm set_ram R14 512 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm slot_add_binding R14 1 0 PA-GE 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm slot_add_binding R14 2 0 PA-GE 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm slot_add_binding R14 3 0 PA-GE 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:02.246 HYPERVISOR: exec_cmd: vm slot_add_binding R14 4 0 PA-GE 
+Feb 01 09:00:02.247 HYPERVISOR: exec_cmd: vm set_con_tcp_port R14 5017 
+Feb 01 09:00:03.343 HYPERVISOR: exec_cmd: nio create_udp udp-cea6c68b-28c9-4da5-94d6-a255fc6c8f52 10034 127.0.0.1 10035 
+Feb 01 09:00:03.551 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R14 1 0 udp-cea6c68b-28c9-4da5-94d6-a255fc6c8f52 
+Feb 01 09:00:03.552 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:03.642 HYPERVISOR: exec_cmd: nio create_udp udp-ccc1b15f-2baa-44a0-b151-9b645642ff82 10040 127.0.0.1 10041 
+Feb 01 09:00:03.643 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R14 2 0 udp-ccc1b15f-2baa-44a0-b151-9b645642ff82 
+Feb 01 09:00:03.643 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:00:04.030 HYPERVISOR: exec_cmd: nio create_udp udp-ad550a42-c2d1-456e-abc5-300f4bb5d082 10050 127.0.0.1 10051 
+Feb 01 09:00:04.030 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R14 3 0 udp-ad550a42-c2d1-456e-abc5-300f4bb5d082 
+Feb 01 09:00:04.031 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:01:01.747 HYPERVISOR: exec_cmd: vm set_ghost_status R14 2 
+Feb 01 09:01:01.748 HYPERVISOR: exec_cmd: vm set_ghost_file R14 /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/c7200-advipservicesk9-mz.152-4.S5.image-512.ghost 
+Feb 01 09:01:01.748 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:01:01.748 HYPERVISOR: exec_cmd: vm set_config R14 configs/i14_startup-config.cfg 
+Feb 01 09:01:01.748 HYPERVISOR: exec_cmd: vm start R14 
+Feb 01 09:01:32.002 HYPERVISOR: exec_cmd: vm extract_config R14 
+Feb 01 09:14:23.430 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:14:23.430 HYPERVISOR: exec_cmd: vm stop R14 
+Feb 01 09:14:23.502 VM: VM R14 shutdown.
+Feb 01 09:14:23.503 HYPERVISOR: exec_cmd: vm extract_config R14 
+Feb 01 09:14:24.241 HYPERVISOR: exec_cmd: vm get_status R14 
+Feb 01 09:14:24.242 HYPERVISOR: exec_cmd: vm extract_config R14 
+Feb 01 09:14:24.243 HYPERVISOR: exec_cmd: vm delete R14 
+Feb 01 09:14:24.243 VM: VM R14 destroyed.
+Feb 01 09:14:24.244 HYPERVISOR: exec_cmd: hypervisor stop 
+Feb 01 09:14:24.492 HYPERVISOR: Stopped.
+Feb 01 09:14:24.492 GENERAL: reset done.

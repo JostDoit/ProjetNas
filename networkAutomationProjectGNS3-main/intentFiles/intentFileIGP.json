@@ -1,0 +1,457 @@
+{   
+    "constantes":{
+        "ripName": "ripng",
+        "ospfPid": 1,
+        "egp": "bgp"
+    },
+    "as":[
+        {
+            "id":64513,
+            "igp": "rip",
+            "ip-prefix": "2001:100:1:"
+        },
+        {
+            "id":64514,
+            "igp": "ospf",
+            "ip-prefix": "2001:100:2:"
+        }
+    ],
+    "routers": [
+    {
+        "id":1,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":2,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":3,
+                "links":[{
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":2,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":1,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":3,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":4,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":3,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":1,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":2,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":5,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":4,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":2,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":5,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":6,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":7,
+                "links":[{ 
+                    "interface":"GigabitEthernet4/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":5,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":2,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":4,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":6,
+                "links":[{ 
+                    "interface":"GigabitEthernet4/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":7,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":6,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":4,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":5,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":8,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "egp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":7,
+        "as":64513,
+        "adj":[
+            {
+                "neighbor":4,
+                "links":[{
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":5,
+                "links":[{ 
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":9,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "egp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":8,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":6,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "egp"
+                }
+                ]
+            },
+            {
+                "neighbor":10,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":11,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":9,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":7,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "egp"
+                }
+                ]
+            },
+            {
+                "neighbor":10,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":11,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":10,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":8,
+                "links":[{
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":9,
+                "links":[{ 
+                    "interface":"GigabitEthernet4/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":11,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":12,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":11,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":8,
+                "links":[{
+                    "interface":"GigabitEthernet4/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":9,
+                "links":[{ 
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":10,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":13,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":12,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":10,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":13,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":14,
+                "links":[{ 
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":13,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":11,
+                "links":[{ 
+                    "interface":"GigabitEthernet3/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":12,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":14,
+                "links":[{ 
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    },
+    {
+        "id":14,
+        "as":64514,
+        "adj":[
+            {
+                "neighbor":12,
+                "links":[{ 
+                    "interface":"GigabitEthernet1/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            },
+            {
+                "neighbor":13,
+                "links":[{ 
+                    "interface":"GigabitEthernet2/0",
+                    "protocol-type": "igp"
+                }
+                ]
+            }
+        ]
+    }
+]
+}

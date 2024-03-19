@@ -1,0 +1,334 @@
+#RIP sur R1 - routeur avec deux interfaces utilisées : 
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+! 
+!
+!
+!
+!
+!
+!
+!         
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1::1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet2/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:1:0:1/96
+ ipv6 address 2001:100:1:1:0:4:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet3/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet4/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router rip 10
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end
+
+
+#RIP sur R2 - routeur avec trois interfaces utilisées : 
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+! 
+!
+!
+!
+!
+!
+!
+!         
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1::2/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet2/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:1:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!         
+interface GigabitEthernet3/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:8:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet4/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router rip 10
+!
+!
+!
+!         
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end
+
+#RIP sur R4 - routeur avec 4 interfaces utilisées : 
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+!
+hostname R4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+! 
+!
+!
+!
+!
+!
+!
+!         
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:1:0:2/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet2/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:9:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!         
+interface GigabitEthernet3/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:2:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+interface GigabitEthernet4/0
+ no ip address
+ negotiation auto
+ ipv6 address 2001:100:1:1:0:3:0:1/96
+ ipv6 enable
+ ipv6 rip 10 enable
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 router rip 10
+!
+!         
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end

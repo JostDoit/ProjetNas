@@ -1,0 +1,55 @@
+enable
+conf t
+interface Loopback0
+ ipv6 address 21::21/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet3/0
+ no ip address
+ ipv6 address 2001:101:10::2/96
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet2/0
+ no ip address
+ ipv6 address 2001:100:9:1::21/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet1/0
+ no ip address
+ ipv6 address 2001:100:9:3::21/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+router bgp 64521
+ bgp router-id 21.21.21.21
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 20::20 remote-as 64521
+ neighbor 20::20 update-source Loopback0
+ neighbor 22::22 remote-as 64521
+ neighbor 22::22 update-source Loopback0
+ neighbor 2001:101:10::1 remote-as 64519
+ address-family ipv6
+  network 2001:100:9::/48
+  neighbor 20::20 activate
+  neighbor 22::22 activate
+  neighbor 2001:101:10::1 activate
+ exit-address-family
+ipv6 route 2001:100:9::/48 Null0
+ipv6 router ospf 1
+ router-id 21.21.21.21
+ passive-interface GigabitEthernet3/0
+!
+route-map customer permit 10
+ set local-preference 200
+!
+route-map peer permit 10
+ set local-preference 100
+!
+route-map provider permit 10
+ set local-preference 50
+!
+!

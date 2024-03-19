@@ -1,0 +1,54 @@
+# OSPF COST
+
+> entrer dans une interface : 
+ipv6 ospf cost [coût] -> cost par défaut est 1
+
+> voir des informations en plus : 
+show ipv6 ospf interface
+show ipv6 ospf database
+show ipv6 route ospf
+
+> On remarque que plus le cost est élevé, moins ce chemin est recommandé dans OSPF (la maj OSPF se fait sous état de lien)
+
+--------------
+
+# Implémenter les local pref : 
+
+Local Pref : n'est pas partagée par eBGP, plus est elle haute mieux c'est et permet d'orienter du traffic.
+
+1. Depuis un routeur, 2 liens sont disponibles pour aller à une destination. Comment prioriser un lien :
+
+route-map CLIENT permit 10
+  set local-preference 200
+!
+route-map CLIENT permit 20
+!
+router bgp 64512
+  address-family ipv6 unicast
+    neighbor 2001:100:1:9::2 route-map CLIENT in
+    (le voisin est le next-hop, "in" Précise que le route-map sera appliqué aux mises à jour de routage entrantes (routes) provenant du voisin BGP spécifié.)
+    
+=> A noter que dans cet exemple, on choisi d'orienter le traffic tel qu'il soit par un lien. Dans le second exemple il est exmpliqué comment faire selon l'adresse de destination (orienter que pour une destination spécifique)
+
+--
+
+2. Dans une AS, deux routeurs permettent d'aller à une destination. Comment choisir quel routeur va permettre d'y aller : 
+
+> Par défaut la local est à 100. On va alors configurer une local pref supérieur à 100 (150) afin de priorier ce trafic vers une destination spécifique (2001:100:1:4::/64) : 
+
+ipv6 access-list ACL1
+  permit ipv6 2001:100:1:4::/64 any
+!
+route-map RM1 permit 10
+  match ipv6 address ACL1
+  set local-preference 150
+!
+route-map RM1 permit 20
+!
+router bgp 64512
+  address-family ipv6 unicast
+    neighbor 2001:100:1:6::1 route-map RM1 in
+
+-> une ACL est utilisée comme variable (le couple source destination ne peut pas être utilisé mais est spécifié dans la route map).
+-> A noter : Le second permit permet d'autoriser le trafic qui ne match pas avec la première règle de la route. 
+-> Les routes map sont tester du chiffre le plus faible au plus haut.

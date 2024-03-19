@@ -1,0 +1,53 @@
+Feb 01 09:00:02.140 HYPERVISOR: Release 0.2.23-amd64/Linux (tag 2023010200)
+Feb 01 09:00:02.140 HYPERVISOR: Started on IP = 127.0.0.1, TCP port = 38885.
+Feb 01 09:00:02.148 HYPERVISOR: exec_cmd: hypervisor version 
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips 
+Feb 01 09:00:02.149 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/95f6ecd5-b881-4f5c-82bf-a634fe046444 
+Feb 01 09:00:02.149 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/95f6ecd5-b881-4f5c-82bf-a634fe046444
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: vm create R10 10 c7200 
+Feb 01 09:00:02.149 VM: VM R10 created.
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: vm set_con_tcp_port R10 5013 
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: c7200 get_mac_addr R10 
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: vm slot_add_binding R10 0 0 C7200-IO-FE 
+Feb 01 09:00:02.149 HYPERVISOR: exec_cmd: vm set_disk0 R10 0 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm set_ios R10 /root/GNS3/images/IOS/c7200-advipservicesk9-mz.152-4.S5.image 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: c7200 set_mac_addr R10 ca0a.5004.0000 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm set_nvram R10 512 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm set_ram R10 512 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm slot_add_binding R10 1 0 PA-GE 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm slot_add_binding R10 2 0 PA-GE 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:02.150 HYPERVISOR: exec_cmd: vm slot_add_binding R10 3 0 PA-GE 
+Feb 01 09:00:02.151 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:02.151 HYPERVISOR: exec_cmd: vm slot_add_binding R10 4 0 PA-GE 
+Feb 01 09:00:02.151 HYPERVISOR: exec_cmd: vm set_con_tcp_port R10 5013 
+Feb 01 09:00:08.902 HYPERVISOR: exec_cmd: nio create_udp udp-e18296bf-7496-4ec3-a1be-695ac4d1374d 10154 127.0.0.1 10155 
+Feb 01 09:00:09.110 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R10 1 0 udp-e18296bf-7496-4ec3-a1be-695ac4d1374d 
+Feb 01 09:00:09.110 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:09.503 HYPERVISOR: exec_cmd: nio create_udp udp-f1d6690e-0ad2-4184-b18a-05a706487971 10164 127.0.0.1 10165 
+Feb 01 09:00:09.504 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R10 2 0 udp-f1d6690e-0ad2-4184-b18a-05a706487971 
+Feb 01 09:00:09.504 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:00:09.591 HYPERVISOR: exec_cmd: nio create_udp udp-8d5df56c-b279-4b32-ab92-dbeedf7585dd 10170 127.0.0.1 10171 
+Feb 01 09:00:09.592 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R10 3 0 udp-8d5df56c-b279-4b32-ab92-dbeedf7585dd 
+Feb 01 09:00:09.592 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:01:01.309 HYPERVISOR: exec_cmd: vm set_ghost_status R10 2 
+Feb 01 09:01:01.310 HYPERVISOR: exec_cmd: vm set_ghost_file R10 /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/c7200-advipservicesk9-mz.152-4.S5.image-512.ghost 
+Feb 01 09:01:01.310 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:01:01.310 HYPERVISOR: exec_cmd: vm set_config R10 configs/i10_startup-config.cfg 
+Feb 01 09:01:01.310 HYPERVISOR: exec_cmd: vm start R10 
+Feb 01 09:01:31.520 HYPERVISOR: exec_cmd: vm extract_config R10 
+Feb 01 09:14:23.246 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:14:23.247 HYPERVISOR: exec_cmd: vm stop R10 
+Feb 01 09:14:23.356 VM: VM R10 shutdown.
+Feb 01 09:14:23.358 HYPERVISOR: exec_cmd: vm extract_config R10 
+Feb 01 09:14:24.293 HYPERVISOR: exec_cmd: vm get_status R10 
+Feb 01 09:14:24.293 HYPERVISOR: exec_cmd: vm extract_config R10 
+Feb 01 09:14:24.294 HYPERVISOR: exec_cmd: vm delete R10 
+Feb 01 09:14:24.294 VM: VM R10 destroyed.
+Feb 01 09:14:24.295 HYPERVISOR: exec_cmd: hypervisor stop 
+Feb 01 09:14:24.396 HYPERVISOR: Stopped.
+Feb 01 09:14:24.397 GENERAL: reset done.

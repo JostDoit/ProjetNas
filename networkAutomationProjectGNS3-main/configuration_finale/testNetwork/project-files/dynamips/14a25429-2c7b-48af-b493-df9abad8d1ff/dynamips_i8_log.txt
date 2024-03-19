@@ -1,0 +1,47 @@
+Feb 01 09:00:01.988 HYPERVISOR: Release 0.2.23-amd64/Linux (tag 2023010200)
+Feb 01 09:00:01.988 HYPERVISOR: Started on IP = 127.0.0.1, TCP port = 34855.
+Feb 01 09:00:01.997 HYPERVISOR: exec_cmd: hypervisor version 
+Feb 01 09:00:01.997 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips 
+Feb 01 09:00:01.997 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: hypervisor working_dir /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/5b30a7b4-fd5d-47c6-a73f-d1a5085e01cd 
+Feb 01 09:00:01.998 GENERAL: working_dir=/home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/5b30a7b4-fd5d-47c6-a73f-d1a5085e01cd
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: vm create R4 4 c7200 
+Feb 01 09:00:01.998 VM: VM R4 created.
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: vm set_con_tcp_port R4 5007 
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: c7200 get_mac_addr R4 
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:00:01.998 HYPERVISOR: exec_cmd: vm slot_add_binding R4 0 0 C7200-IO-FE 
+Feb 01 09:00:01.999 HYPERVISOR: exec_cmd: vm set_disk0 R4 0 
+Feb 01 09:00:01.999 HYPERVISOR: exec_cmd: vm set_ios R4 /root/GNS3/images/IOS/c7200-advipservicesk9-mz.152-4.S5.image 
+Feb 01 09:00:02.000 HYPERVISOR: exec_cmd: c7200 set_mac_addr R4 ca04.6064.0000 
+Feb 01 09:00:02.000 HYPERVISOR: exec_cmd: vm set_nvram R4 512 
+Feb 01 09:00:02.000 HYPERVISOR: exec_cmd: vm set_ram R4 512 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm slot_add_binding R4 1 0 PA-GE 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm slot_add_binding R4 2 0 PA-GE 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm slot_add_binding R4 3 0 PA-GE 
+Feb 01 09:00:02.001 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:00:02.002 HYPERVISOR: exec_cmd: vm slot_add_binding R4 4 0 PA-GE 
+Feb 01 09:00:02.002 HYPERVISOR: exec_cmd: vm set_con_tcp_port R4 5007 
+Feb 01 09:00:09.597 HYPERVISOR: exec_cmd: nio create_udp udp-ba84487f-dbec-4f89-b4c0-a7afbcd581cf 10172 127.0.0.1 10173 
+Feb 01 09:00:09.805 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R4 1 0 udp-ba84487f-dbec-4f89-b4c0-a7afbcd581cf 
+Feb 01 09:00:09.805 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:01:00.861 HYPERVISOR: exec_cmd: vm set_ghost_status R4 2 
+Feb 01 09:01:00.861 HYPERVISOR: exec_cmd: vm set_ghost_file R4 /home/thomas/Bureau/TELNET/testNetwork/project-files/dynamips/c7200-advipservicesk9-mz.152-4.S5.image-512.ghost 
+Feb 01 09:01:00.862 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:01:00.862 HYPERVISOR: exec_cmd: vm set_config R4 configs/i4_startup-config.cfg 
+Feb 01 09:01:00.862 HYPERVISOR: exec_cmd: vm start R4 
+Feb 01 09:01:31.087 HYPERVISOR: exec_cmd: vm extract_config R4 
+Feb 01 09:14:23.006 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:14:23.007 HYPERVISOR: exec_cmd: vm stop R4 
+Feb 01 09:14:23.106 VM: VM R4 shutdown.
+Feb 01 09:14:23.108 HYPERVISOR: exec_cmd: vm extract_config R4 
+Feb 01 09:14:23.974 HYPERVISOR: exec_cmd: vm get_status R4 
+Feb 01 09:14:23.975 HYPERVISOR: exec_cmd: vm extract_config R4 
+Feb 01 09:14:23.976 HYPERVISOR: exec_cmd: vm delete R4 
+Feb 01 09:14:23.976 VM: VM R4 destroyed.
+Feb 01 09:14:23.977 HYPERVISOR: exec_cmd: hypervisor stop 
+Feb 01 09:14:24.243 HYPERVISOR: Stopped.
+Feb 01 09:14:24.243 GENERAL: reset done.

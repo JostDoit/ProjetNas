@@ -1,0 +1,63 @@
+enable
+conf t
+interface Loopback0
+ ipv6 address 19::19/128
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet1/0
+ no ip address
+ ipv6 address 2001:100:8:2::19/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet2/0
+ no ip address
+ ipv6 address 2001:100:8:3::19/64
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet3/0
+ no ip address
+ ipv6 address 2001:101:13::1/96
+ ipv6 enable
+ ipv6 ospf 1 area 0
+!
+router bgp 64520
+ bgp router-id 19.19.19.19
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+ neighbor 17::17 remote-as 64520
+ neighbor 17::17 update-source Loopback0
+ neighbor 18::18 remote-as 64520
+ neighbor 18::18 update-source Loopback0
+ neighbor 2001:101:13::2 remote-as 64521
+ address-family ipv6
+  network 2001:100:8::/48
+  neighbor 17::17 activate
+  neighbor 18::18 activate
+  neighbor 2001:101:13::2 activate
+  neighbor 2001:101:13::2 route-map peer in
+  neighbor 2001:101:13::2 route-map RM_BLOCK_CLIENT_ROUTE_TO_64521 out
+ exit-address-family
+ipv6 route 2001:100:8::/48 Null0
+ipv6 router ospf 1
+ router-id 19.19.19.19
+ passive-interface GigabitEthernet3/0
+!
+route-map customer permit 10
+ set local-preference 200
+!
+route-map peer permit 10
+ set local-preference 100
+!
+route-map provider permit 10
+ set local-preference 50
+!
+exit
+ipv6 prefix-list PL_BLOCK_CLIENT_ROUTE_TO_64521 seq 10 deny ::/0
+route-map RM_BLOCK_CLIENT_ROUTE_TO_64521 permit 10
+ match community 64520:200
+ match ipv6 address prefix-list PL_BLOCK_CLIENT_ROUTE_TO_64521
+!
+!
