@@ -69,7 +69,7 @@ for router in routers:
 
     #Interface de Loopback
     res.write("interface Loopback0\n"
-              f" ip address {id}.{id}.{id}.{id}/32\n"
+              f" ip address {id}.{id}.{id}.{id} 255.255.255.255\n"
               " ip enable\n")
     if(igp == "ospf"):
         res.write(f" ipv4 ospf {ospfProcess} area 0\n") # MODIF utiliser OSPFV2
