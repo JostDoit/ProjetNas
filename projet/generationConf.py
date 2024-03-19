@@ -45,13 +45,7 @@ compteurLienAS = 0
 
 #Constantes
 egp = intentFile["constantes"]["egp"]
-ripName = intentFile["constantes"]["ripName"]
 ospfProcess = str(intentFile["constantes"]["ospfPid"])
-customerPrefValue = intentFile["constantes"]["customerPref"]
-peerPrefValue = intentFile["constantes"]["peerPref"]
-providerPrefValue = intentFile["constantes"]["providerPref"]
-blockPeerValue = intentFile["constantes"]["blockPeerValue"]
-blockRegionValue = intentFile["constantes"]["blockRegionValue"]
 
 #Ecriture de la configuration pour chaque routeur
 for router in routers:
@@ -77,12 +71,10 @@ for router in routers:
 
     #Interface de Loopback
     res.write("interface Loopback0\n"
-              f" ipv6 address {id}::{id}/128\n"
-              " ipv6 enable\n")
-    if(igp == "rip"):
-        res.write(f" ipv6 rip {ripName} enable\n")
-    elif(igp == "ospf"):
-        res.write(f" ipv6 ospf {ospfProcess} area 0\n")
+              f" ipv4 address {id}.{id}.{id}.{id}/32\n"
+              " ipv4 enable\n")
+    if(igp == "ospf"):
+        res.write(f" ipv4 ospf {ospfProcess} area 0\n") # MODIF utiliser OSPFV2
     res.write("!\n")
 
     #Interfaces
@@ -102,7 +94,7 @@ for router in routers:
                 ip = asPrefix[As]
             else:
                 isASBR = True                
-                ip = "2001:101:"
+                ip = "2001:101:" # MODIF
                 
             #Partie Sufixe
             # Si sous reseau pas encore initialise i.e premiere interface
@@ -110,18 +102,18 @@ for router in routers:
                 if link["protocol-type"] == "igp":
                     dicoSousRes[As] += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = dicoSousRes[As], dicoSousRes[As]           
-                    ip += (str(dicoSousRes[As]) + "::" + str(id))
+                    ip += (str(dicoSousRes[As]) + "::" + str(id)) # MODIF
                 else:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
-                    neighborAddress = ip + str(compteurLienAS) + "::2"
+                    neighborAddress = ip + str(compteurLienAS) + "::2" # MODIF
                     neighborsAddressList.append([neighborAddress,neighbourAs])
-                    ip += str(compteurLienAS) + "::1"            
+                    ip += str(compteurLienAS) + "::1" # MODIF           
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
-                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::" + str(id))
+                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::" + str(id)) # MODIF
                 else:
-                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::1"
+                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::1" 
                     neighborsAddressList.append([neighborAddress,neighbourAs])
                     ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::2"
             
@@ -129,22 +121,19 @@ for router in routers:
             # utilisation d'un masque /64 pour les liens IGP et /96 pour les liens EGP
             res.write(f"interface {link['interface']}\n"
                       " no ip address\n")
-            if link["protocol-type"] == "egp":
-                res.write(f" ipv6 address {ip}/96\n")
-            else:
-                res.write(f" ipv6 address {ip}/64\n")
+          
+            res.write(f" ipv4 address {ip}/30\n")
             
-            res.write(" ipv6 enable\n")
+            
+            res.write(" ipv4 enable\n")
 
             #Gestion des différences OSPF/RIP
-            if link["protocol-type"] == "igp" and igp == "rip":
-                res.write(f" ipv6 rip {ripName} enable\n")
-            elif igp == "ospf":
-                res.write(f" ipv6 ospf {ospfProcess} area 0\n")
+            if igp == "ospf":
+                res.write(f" ipv6 ospf {ospfProcess} area 0\n") # MODIF
                 if link["protocol-type"] == "egp":
                     interfacesEGP.append(link['interface'])
                 try:
-                    res.write(f" ipv6 ospf cost {link['ospfCost']}\n")
+                    res.write(f" ipv6 ospf cost {link['ospfCost']}\n") # MODIF utile ?
                 except:
                     pass  
             res.write("!\n")
@@ -153,15 +142,15 @@ for router in routers:
     res.write(f"router bgp {As}\n"
               f" bgp router-id {id}.{id}.{id}.{id}\n"
               " bgp log-neighbor-changes\n"
-              " no bgp default ipv4-unicast\n")
+              " no bgp default ipv4-unicast\n") # MODIF virer dernière ligne ?
     
     #Ajout des voisins IGP
     for router in routers:
         if router["as"] == As:
             routerID = router["id"]
             if routerID != id:                
-                res.write(f" neighbor {routerID}::{routerID} remote-as {As}\n")
-                res.write(f" neighbor {routerID}::{routerID} update-source Loopback0\n")
+                res.write(f" neighbor {routerID}.{routerID}.{routerID}.{routerID} remote-as {As}\n")
+                res.write(f" neighbor {routerID}.{routerID}.{routerID}.{routerID} update-source Loopback0\n")
     
     #Ajout des voisins EGP
     if isASBR :
@@ -171,154 +160,40 @@ for router in routers:
             res.write(f" neighbor {ipNeighb} remote-as {asNeighb}\n")
     
     res.write(
-              " address-family ipv6\n")
+              " address-family ipv4\n") # MODIF vérif commande ajout unicast ?
 
     #Annonce du préfixe de l'AS et donc de tous les sous-réseaux de l'AS
-    res.write(f"  network {asPrefix[As]}:/48\n")
+    res.write(f"  network {asPrefix[As]}:/48\n") # MODIF
 
     #On active les loopbacks des autres routeurs de l'AS
     for router in routers:
         if router["as"] == As:
             routerID = router["id"]
             if routerID != id:
-                res.write(f"  neighbor {routerID}::{routerID} activate\n")
+                res.write(f"  neighbor {routerID}.{routerID}.{routerID}.{routerID} activate\n")
     
     if isASBR:
-        #On récupère les infos de l'as auquel appartient le routeur
-        for a in asList:                
-            if a["id"] == As:
-                try:
-                    asCustomers = a["customers"]
-                except:
-                    asCustomers = []
-                try:
-                    asPeers = a["peers"]
-                except:
-                    asPeers = []
-                try:
-                    asProviders = a["providers"]
-                except:
-                    asProviders = []
-                try:
-                    asPeerToBlock = a["peerToBlock"]
-                except:
-                    asPeerToBlock = []
-                try:
-                    asCommunityToUse = a["community-to-use"]
-                except:
-                    asCommunityToUse = []
-                try:
-                    asRegionToBlock = a["regionToBlock"]
-                except:
-                    asRegionToBlock = []
-                break
         
         #Pour chaque voisin EGP
         for egpNeighborsAddress in neighborsAddressList:
             res.write(f"  neighbor {egpNeighborsAddress[0]} activate\n")
-
-            #LocalPref client>peer>provider
-            if egpNeighborsAddress[1] in asCustomers:
-                res.write(f"  neighbor {egpNeighborsAddress[0]} route-map customer in\n")
-            elif egpNeighborsAddress[1] in asPeers:
-                res.write(f"  neighbor {egpNeighborsAddress[0]} route-map peer in\n")
-            elif egpNeighborsAddress[1] in asProviders:
-                res.write(f"  neighbor {egpNeighborsAddress[0]} route-map provider in\n")
-            
-            #Blocking Peer Community
-            if egpNeighborsAddress[1] in asPeerToBlock:
-                res.write(f"  neighbor {egpNeighborsAddress[0]} route-map BlockRoutePeer out\n")
-                for router in routers:
-                    if router["as"] == As:
-                        routerID = router["id"]
-                        if routerID != id:
-                            res.write(f"  neighbor {routerID}::{routerID} send-community\n")
-            
-            #Blocking Region
-            for region in asRegionToBlock:
-                if egpNeighborsAddress[1] == region:
-                    res.write(f"  neighbor {egpNeighborsAddress[0]} route-map RM_BLOCK_CLIENT_ROUTE_TO_{region} out\n")
-            
-            if len(asCommunityToUse) > 0:
-                for community in asCommunityToUse:
-                    res.write(f"  neighbor {egpNeighborsAddress[0]} route-map RM{community[0]} out\n")
             
 
     
     res.write(" exit-address-family\n")
 
-    if isASBR and len(asPeerToBlock) > 0:
-        res.write("ip bgp-community new-format\n"
-                  f"ip community-list standard blockPeerPeer permit {As}:{blockPeerValue}\n"
-                  f"ip as-path access-list 10 deny _{blockPeerValue}$"
-                  "\n!\n")
-
     if isASBR:
-        res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n")
+        res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n") # MODIF
     # IGP
-    if(igp == "rip"):
-        res.write(f"ipv6 router rip {ripName}\n"
-                  " redistribute connected\n")
                   
     if(igp == "ospf"):
-        res.write(f"ipv6 router ospf {ospfProcess}\n"
+        res.write(f"ipv6 router ospf {ospfProcess}\n" # MODIF
                   f" router-id {id}.{id}.{id}.{id}\n")
         if isASBR:           
             for interfaceName in interfacesEGP:
                 res.write(f" passive-interface {interfaceName}\n")
             #A decocher pour tout annoncer
             #res.write(" redistribute connected\n")
-    if isASBR:
-        ##Route-maps
-        res.write("!\n"
-                  "route-map customer permit 10\n"
-                  f" set local-preference {customerPrefValue}\n"
-                  "!\n"
-                  "route-map peer permit 10\n"
-                  f" set local-preference {peerPrefValue}\n"
-                  "!\n"
-                  "route-map provider permit 10\n"
-                  f" set local-preference {providerPrefValue}\n"
-                  "!\n")
-        
-        if len(asPeerToBlock) > 0:
-            for _ in asPeerToBlock:                
-                res.write("route-map BlockRoutePeer permit 10\n"
-                        " match as-path 10\n"
-                        f" match community {As}:{blockPeerValue}\n"
-                        f" set community {As}:{blockPeerValue}\n"
-                        "!\n")
-        
-        if len(asRegionToBlock) > 0:
-            stop = False
-            for region in asRegionToBlock:
-                for router in routers:
-                    if router["as"] == region:                
-                        for adj in router["adj"]:
-                            neighbourID = adj["neighbor"]                            
-                            if neighbourID == id:                
-                                res.write(f"exit\nipv6 prefix-list PL_BLOCK_CLIENT_ROUTE_TO_{region} seq 10 deny ::/0\n"
-                                        f"route-map RM_BLOCK_CLIENT_ROUTE_TO_{region} permit 10\n"
-                                        f" match community {As}:{blockRegionValue}\n"
-                                        f" match ipv6 address prefix-list PL_BLOCK_CLIENT_ROUTE_TO_{region}\n"
-                                        "!\n")
-                                stop = True
-                                break
-                    if stop:
-                        break
-                if stop:
-                    break
-        
-        if len(asCommunityToUse) > 0:
-            for community in asCommunityToUse:
-                res.write(f"ipv6 prefix-list PL{community[0]} seq 10 permit {asPrefix[As]}:/48\n"
-                          f"route-map RM{community[0]} permit 10\n"
-                          f" match ip address prefix-list PL{community[0]}\n"
-                          f" set community {As}:{community[1]}\n"
-                          "!\n")
-    
-                
-    res.write("!\n")
     
     res.close()
 
