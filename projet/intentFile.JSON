@@ -1,0 +1,88 @@
+{   
+    "constantes":{
+        "ospfPid": 1,
+        "egp": "bgp"
+    },
+    "as":[
+        {
+            "id":64513,
+            "igp": "ospf",
+            "ip-prefix": "192.168." //prochain AS : 192.169.
+        }
+    ],
+
+    "routers": [
+        {
+            "id":1,
+            "as":64513,
+            "adj":[
+                {
+                    "neighbor":2,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                }
+            ]
+        },
+        {
+            "id":2,
+            "as":64513,
+            "adj":[
+                {
+                    "neighbor":1,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                },
+                {
+                    "neighbor":3,
+                    "links":[{
+                        "interface":"GigabitEthernet2/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                }
+            ]
+        },
+        {
+            "id":3,
+            "as":64513,
+            "adj":[
+                {
+                    "neighbor":2,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                },
+                {
+                    "neighbor":4,
+                    "links":[{
+                        "interface":"GigabitEthernet2/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                }
+            ]
+        },
+        {
+            "id":4,
+            "as":64513,
+            "adj":[
+                {
+                    "neighbor":3,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "igp"
+                    }
+                    ]
+                }
+            ]
+        }
+    ]
+}
