@@ -129,8 +129,8 @@ for router in routers:
                 vrf_rt = vrf["rt"]
                 if [vrf_name, vrf_rd, vrf_rt] not in vrfs:
                     vrfs.append([vrf_name, vrf_rd, vrf_rt])
-                    res.write(f"ip vrf {vrf}\n")
-                res.write(f"vrf forwarding {vrf}\n")
+                    res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
+                res.write(f" vrf forwarding {vrf_name}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
 
@@ -195,12 +195,12 @@ for router in routers:
     res.write(" exit-address-family\n")
 
     #VRF
-    for vrf in vrfs:
-        res.write(f" address-family ipv4 vrf {vrf[0]}\n"
-                  f" neighbor {} remote-as {}\n"
-                  f" neighbor {} activate\n"
-                  "exit-address-family\n"
-                  "!\n")
+    # for vrf in vrfs:
+    #     res.write(f" address-family ipv4 vrf {vrf[0]}\n"
+    #               f" neighbor {} remote-as {}\n"
+    #               f" neighbor {} activate\n"
+    #               "exit-address-family\n"
+    #               "!\n")
         
 
     if isASBR:
