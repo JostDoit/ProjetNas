@@ -1,7 +1,7 @@
 import os, shutil
 
 configDir = "./configRouteur"
-dynamipsDir = "../GNS3/project-files/dynamips/"
+dynamipsDir = "C:/Users/arthu/OneDrive - INSA Lyon/Documents/INSA/3A/NAS/GNS3/project-files/dynamips"
 
 routersDir = []
 
