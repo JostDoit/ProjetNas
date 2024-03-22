@@ -92,7 +92,7 @@ for router in routers:
                 ip = asPrefix[As]
             else:
                 isASBR = True                
-                ip = "2001:101:" # MODIF
+                ip = "192.168." 
                 
             #Partie Sufixe
             # Si sous reseau pas encore initialise i.e premiere interface
@@ -104,16 +104,16 @@ for router in routers:
                 else:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
-                    neighborAddress = ip + str(compteurLienAS) + "::2" # MODIF
+                    neighborAddress = ip + str(compteurLienAS) + ".2" 
                     neighborsAddressList.append([neighborAddress,neighbourAs])
-                    ip += str(compteurLienAS) + "::1" # MODIF           
+                    ip += str(compteurLienAS) + ".1"      
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
                     ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(id))
                 else:
-                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::1" # MODIF
+                    neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".1" 
                     neighborsAddressList.append([neighborAddress,neighbourAs])
-                    ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + "::2" # MODIF
+                    ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".2" 
             
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
             res.write(f"interface {link['interface']}\n"
@@ -175,7 +175,7 @@ for router in routers:
     # IGP
                   
     if(igp == "ospf"):
-        res.write(f"router ospf {ospfProcess}\n" # MODIF
+        res.write(f"router ospf {ospfProcess}\n" 
                   f" router-id {id}.{id}.{id}.{id}\n")
         if isASBR:           
             for interfaceName in interfacesEGP:
