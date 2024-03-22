@@ -44,7 +44,33 @@
                         "protocol-type": "igp"
                     }
                     ]
-                }
+                },
+                {
+                    "neighbor":5,
+                    "links":[{
+                        "interface":"GigabitEthernet2/0",
+                        "protocol-type": "egp",
+                        "vrf":{
+                            "name":"CLIENT_A",
+                            "rd": "64513:1",
+                            "rt": "64513:1"
+                        }
+                    }
+                    ]
+                },
+                {
+                    "neighbor":6,
+                    "links":[{
+                        "interface":"GigabitEthernet3/0",
+                        "protocol-type": "egp",
+                        "vrf":{
+                            "name":"CLIENT_B",
+                            "rd": "64513:2",
+                            "rt": "64513:2"
+                        }
+                    }
+                    ]
+                }                    
             ]
         },
         {
@@ -102,11 +128,35 @@
                         "protocol-type": "igp"
                     }
                     ]
-                }
+                },
+                {
+                    "neighbor":7,
+                    "links":[{
+                        "interface":"GigabitEthernet2/0",
+                        "protocol-type": "egp",
+                        "vrf":{
+                            "name":"CLIENT_A",
+                            "rd": "64513:1",
+                            "rt": "64513:1"
+                        }
+                    }
+                    ]
+                },
+                {
+                    "neighbor":8,
+                    "links":[{
+                        "interface":"GigabitEthernet3/0",
+                        "protocol-type": "egp",
+                        "vrf":{
+                            "name":"CLIENT_B",
+                            "rd": "64513:2",
+                            "rt": "64513:2"
+                        }
+                    }
+                    ]
+                }                
             ]
         },
-
-
         {
             "id":5,
             "as":64514,
