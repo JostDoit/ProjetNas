@@ -54,6 +54,7 @@ for router in routers:
     neighborsAddressList = []   #Liste qui contiendra les adresses IP des voisins EGP du routeur
     interfacesEGP = []          #Liste qui contiendra les noms des interfaces EGP du routeur, afin de les déclarer plus tard en passives intarfaces dans le processus OSPF
     isASBR = False
+    vrfs = []
 
     #Recuperation de l'IGP utilise par l'AS (RIP ou OSPF)
     for i in asList:
@@ -120,6 +121,16 @@ for router in routers:
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
             res.write(f"interface {link['interface']}\n"
                       " no ip address\n")
+            #VRF
+            if "vrf" in link:
+                vrf = link["vrf"]
+                vrf_name = vrf["name"]
+                vrf_rd = vrf["rd"]
+                vrf_rt = vrf["rt"]
+                if [vrf_name, vrf_rd, vrf_rt] not in vrfs:
+                    vrfs.append([vrf_name, vrf_rd, vrf_rt])
+                    res.write(f"ip vrf {vrf}\n")
+                res.write(f"vrf forwarding {vrf}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
 
@@ -131,6 +142,18 @@ for router in routers:
 
             res.write(f" mpls ip\n mpls label protocol ldp\n")
             res.write("!\n")
+    
+    #VRF
+    for vrf in vrfs:
+        res.write(f"vrf definition {vrf[0]}\n"
+                  f" rd {vrf[1]}\n"
+                  f" route-target export {vrf[2]}\n"
+                  f" route-target import {vrf[2]}\n"
+                  " !\n"
+                  " address-family ipv4\n"
+                  " exit-address-family\n")
+    
+    res.write("!\n")
     
     #EGP
     res.write(f"router bgp {As}\n"
@@ -170,6 +193,15 @@ for router in routers:
             res.write(f"  neighbor {egpNeighborsAddress[0]} activate\n")
     
     res.write(" exit-address-family\n")
+
+    #VRF
+    for vrf in vrfs:
+        res.write(f" address-family ipv4 vrf {vrf[0]}\n"
+                  f" neighbor {} remote-as {}\n"
+                  f" neighbor {} activate\n"
+                  "exit-address-family\n"
+                  "!\n")
+        
 
     if isASBR:
         res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n") # MODIF
