@@ -8,6 +8,27 @@
             "id":64513,
             "igp": "ospf",
             "ip-prefix": "192.168."
+        },
+
+        {
+            "id":64514,
+            "igp":"ospf",
+            "ip-prefix":"192.169."
+        },
+        {
+            "id":64515,
+            "igp":"ospf",
+            "ip-prefix":"192.170."
+        },
+        {
+            "id":64516,
+            "igp":"ospf",
+            "ip-prefix":"192.171."
+        },
+        {
+            "id":64517,
+            "igp":"ospf",
+            "ip-prefix":"192.172."
         }
     ],
 
@@ -81,6 +102,60 @@
                         "protocol-type": "igp"
                     }
                     ]
+                }
+            ]
+        },
+
+
+        {
+            "id":5,
+            "as":64514,
+            "adj":[
+                {
+                    "neighbor":1,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "egp"
+                    }]
+                }
+            ]
+        },
+        {
+            "id":6,
+            "as":64515,
+            "adj":[
+                {
+                    "neighbor":1,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "egp"
+                    }]
+                }
+            ]
+        },
+        {
+            "id":7,
+            "as":64516,
+            "adj":[
+                {
+                    "neighbor":4,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "egp"
+                    }]
+                }
+            ]
+        },
+        {
+            "id":8,
+            "as":64517,
+            "adj":[
+                {
+                    "neighbor":2,
+                    "links":[{
+                        "interface":"GigabitEthernet1/0",
+                        "protocol-type": "egp"
+                    }]
                 }
             ]
         }
