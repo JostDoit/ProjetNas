@@ -63,7 +63,7 @@ for router in routers:
     #Creation du fichier de configuration du routeur sous la même forme que les fichiers de configuration de GNS3
     if not os.path.exists(outputPath):
         os.makedirs(outputPath)
-    res = open(f"{outputPath}/R{id}.txt", "w")
+    res = open(f"{outputPath}/i{id}_startup-config.cfg", "w")
 
     res.write("enable\nconf t\n")
 
@@ -72,7 +72,7 @@ for router in routers:
               f" ip address {id}.{id}.{id}.{id} 255.255.255.255\n"
               " ip enable\n")
     if(igp == "ospf"):
-        res.write(f" ipv4 ospf {ospfProcess} area 0\n") # MODIF utiliser OSPFV2
+        res.write(f" ip ospf {ospfProcess} area 0\n")
     res.write("!\n")
 
     #Interfaces
@@ -123,13 +123,11 @@ for router in routers:
 
             #OSPF
             if igp == "ospf":
-                res.write(f" ipv6 ospf {ospfProcess} area 0\n") # MODIF
+                res.write(f" ip ospf {ospfProcess} area 0\n")
                 if link["protocol-type"] == "egp":
                     interfacesEGP.append(link['interface'])
-                try:
-                    res.write(f" ipv6 ospf cost {link['ospfCost']}\n") # MODIF utile ?
-                except:
-                    pass  
+
+            res.write(f" mpls ip\n mpls label protocol ldp\n")
             res.write("!\n")
     
     #EGP
@@ -177,7 +175,7 @@ for router in routers:
     # IGP
                   
     if(igp == "ospf"):
-        res.write(f"ipv6 router ospf {ospfProcess}\n" # MODIF
+        res.write(f"router ospf {ospfProcess}\n" # MODIF
                   f" router-id {id}.{id}.{id}.{id}\n")
         if isASBR:           
             for interfaceName in interfacesEGP:

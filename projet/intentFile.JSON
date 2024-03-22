@@ -7,7 +7,7 @@
         {
             "id":64513,
             "igp": "ospf",
-            "ip-prefix": "192.168." //prochain AS : 192.169.
+            "ip-prefix": "192.168."
         }
     ],
 
