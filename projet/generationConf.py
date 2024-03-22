@@ -27,7 +27,7 @@ for i in range(nbAs):
 #Utilsé pour la generation des adresses IP des liens IGP
 dicoSousRes = {} 
 for id in asPrefix:
-    dicoSousRes[id] = 0
+    dicoSousRes[id] = []
 
 #Initialisation d'une matrice contenant les numeros des sous-reseaux entre chaque routeur
 #Utilsé pour la generation des adresses IP des liens IGP
@@ -92,15 +92,15 @@ for router in routers:
                 ip = asPrefix[As]
             else:
                 isASBR = True                
-                ip = "192.168." 
+                ip = "193.168." 
                 
             #Partie Sufixe
             # Si sous reseau pas encore initialise i.e premiere interface
             if matIdSousReseauxAs[id-1][neighbourID-1] == 0 and matIdSousReseauxAs[neighbourID-1][id-1]==0:                
                 if link["protocol-type"] == "igp":
-                    dicoSousRes[As] += 1
-                    matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = dicoSousRes[As], dicoSousRes[As]           
-                    ip += (str(dicoSousRes[As]) + "." + str(id))
+                    dicoSousRes[As].append(1)
+                    matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = len(dicoSousRes[As]), len(dicoSousRes[As])           
+                    ip += (str(len(dicoSousRes[As])) + ".0")
                 else:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
@@ -109,7 +109,9 @@ for router in routers:
                     ip += str(compteurLienAS) + ".1"      
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
-                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(id))
+                    val = dicoSousRes[As][matIdSousReseauxAs[id-1][neighbourID-1]-1]
+                    dicoSousRes[As][matIdSousReseauxAs[id-1][neighbourID-1]-1] += 1
+                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(val))
                 else:
                     neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".1" 
                     neighborsAddressList.append([neighborAddress,neighbourAs])
