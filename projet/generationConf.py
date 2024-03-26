@@ -118,6 +118,8 @@ for router in routers:
             #VRF
             if "vrf" in link:
                 vrf_name = link["vrf"]["name"]
+            else:
+                vrf_name = None
                 
             #Partie Sufixe
             # Si sous reseau pas encore initialise i.e premiere interface
@@ -208,11 +210,12 @@ for router in routers:
             ipNeighb = egpNeighborsAddress[0]
             asNeighb = egpNeighborsAddress[1]
             vrf_name = egpNeighborsAddress[2]
-            res.write(f" address-family ipv4 vrf {vrf_name}\n"
-                    f" neighbor {ipNeighb} remote-as {asNeighb}\n"
-                    f" neighbor {ipNeighb} activate\n"
-                    "exit-address-family\n"
-                    "!\n")
+            if vrf_name is not None:
+                res.write(f" address-family ipv4 vrf {vrf_name}\n"
+                        f" neighbor {ipNeighb} remote-as {asNeighb}\n"
+                        f" neighbor {ipNeighb} activate\n"
+                        "exit-address-family\n"
+                        "!\n")
         
 
     # if isASBR:
