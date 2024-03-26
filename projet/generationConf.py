@@ -55,6 +55,10 @@ for router in routers:
     interfacesEGP = []          #Liste qui contiendra les noms des interfaces EGP du routeur, afin de les déclarer plus tard en passives intarfaces dans le processus OSPF
     isASBR = False
     vrfs = []
+    if "PEAdj" in router:
+        PEAdj = router["PEAdj"]
+    else:
+        PEAdj = []
 
     #Recuperation de l'IGP utilise par l'AS (RIP ou OSPF)
     for i in asList:
@@ -204,11 +208,14 @@ for router in routers:
     res.write(" exit-address-family\n"
               " !\n")
     
-    if isASBR and "PEAdj" in router:
-        res.write(f" address-family vpnv4\n")
-        for adjID in router["PEAdj"]:
+    
+    if len(PEAdj) > 0:
+        res.write(f" address-family vpnv4\n")        
+        for adjID in PEAdj:
             res.write(f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} activate\n"
                       f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community extended\n")
+        res.write(" exit-address-family\n"
+                  "!\n")
             
 
     #VRF
