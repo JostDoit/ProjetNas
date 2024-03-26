@@ -146,7 +146,6 @@ for router in routers:
             res.write(f"interface {link['interface']}\n")
             
             if "vrf" in link:
-                res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
                 res.write(f" vrf forwarding {vrf_name}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
