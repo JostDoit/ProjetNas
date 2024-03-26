@@ -90,8 +90,7 @@ for router in routers:
 
     #Interface de Loopback
     res.write("interface Loopback0\n"
-              f" ip address {id}.{id}.{id}.{id} 255.255.255.255\n"
-              " ip enable\n")
+              f" ip address {id}.{id}.{id}.{id} 255.255.255.255\n")
     if(igp == "ospf"):
         res.write(f" ip ospf {ospfProcess} area 0\n")
     res.write("!\n")
@@ -146,9 +145,9 @@ for router in routers:
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
             res.write(f"interface {link['interface']}\n")
             
-            
-            res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
-            res.write(f" vrf forwarding {vrf_name}\n")
+            if "vrf" in link:
+                res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
+                res.write(f" vrf forwarding {vrf_name}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
 
@@ -158,7 +157,8 @@ for router in routers:
                 if link["protocol-type"] == "egp":
                     interfacesEGP.append(link['interface'])
 
-            res.write(f" mpls ip\n mpls label protocol ldp\n")
+            if "vrf" not in link:
+                res.write(f" mpls ip\n mpls label protocol ldp\n")
             res.write("!\n")
     
     res.write("!\n")
