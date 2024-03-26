@@ -39,7 +39,7 @@ for i in range(0,nbRouter):
 
 #Variable utilisé pour compter le nombre de sous-réseau entre AS
 #Utilisé pour la generation des adresses IP des liens EGP
-compteurLienAS = 0
+compteurLienAS = [1, False]
 
 #Constantes
 egp = intentFile["constantes"]["egp"]
@@ -132,12 +132,14 @@ for router in routers:
                     dicoSousRes[As].append(1)
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = len(dicoSousRes[As]), len(dicoSousRes[As])           
                     ip += (str(len(dicoSousRes[As])) + ".1")
-                else:
-                    compteurLienAS += 1
-                    matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
-                    neighborAddress = ip + str(compteurLienAS) + ".2" 
+                else:                    
+                    matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS[0], compteurLienAS[0]
+                    neighborAddress = ip + str(compteurLienAS[0]) + ".2" 
                     neighborsAddressList.append([neighborAddress,neighbourAs, vrf_name])
-                    ip += str(compteurLienAS) + ".1"      
+                    ip += str(compteurLienAS[0]) + ".1"
+                    if compteurLienAS[1]:
+                        compteurLienAS[0] += 1
+                    compteurLienAS[1] = not compteurLienAS[1]   
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
                     val = dicoSousRes[As][matIdSousReseauxAs[id-1][neighbourID-1]-1]
@@ -191,7 +193,10 @@ for router in routers:
     res.write(" address-family ipv4\n")
 
     #Annonce du préfixe de l'AS et donc de tous les sous-réseaux de l'AS
-    res.write(f"  network {asPrefix[As]}0.0\n")
+    res.write(f"  network {asPrefix[As]}0.0 mask 255.255.255.252\n")
+    if isASBR:
+        for egpNeighborsAddress in neighborsAddressList:
+            res.write(f"  network {egpNeighborsAddress[0][:-2]}.0 mask 255.255.255.252\n")
 
     #On active les loopbacks des autres routeurs de l'AS
     for router in routers:
@@ -213,7 +218,7 @@ for router in routers:
         res.write(f" address-family vpnv4\n")        
         for adjID in PEAdj:
             res.write(f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} activate\n"
-                      f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community extended\n")
+                      f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community both\n")
         res.write(" exit-address-family\n"
                   "!\n")
             
