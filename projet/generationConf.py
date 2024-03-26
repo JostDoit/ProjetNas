@@ -104,6 +104,8 @@ for router in routers:
         for router in routers:
             if router["id"]==neighbourID:           
                 neighbourAs = router["as"]
+                if "client_ip" in router:
+                    client_ip = router["client_ip"]
         
         for link in adj["links"]:
             #Generation de l'addresse IP
@@ -113,11 +115,16 @@ for router in routers:
                 ip = asPrefix[As]
             else:
                 isASBR = True                
-                ip = "193.168." 
+                ip = "193.168."
+
+
+            #VRF
+            if "vrf" in link:
+                vrf_name = link["vrf"]["name"]
                 
             #Partie Sufixe
             # Si sous reseau pas encore initialise i.e premiere interface
-            if matIdSousReseauxAs[id-1][neighbourID-1] == 0 and matIdSousReseauxAs[neighbourID-1][id-1]==0:                
+            if matIdSousReseauxAs[id-1][neighbourID-1] == 0 and matIdSousReseauxAs[neighbourID-1][id-1]==0:
                 if link["protocol-type"] == "igp":
                     dicoSousRes[As].append(1)
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = len(dicoSousRes[As]), len(dicoSousRes[As])           
@@ -126,7 +133,7 @@ for router in routers:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
                     neighborAddress = ip + str(compteurLienAS) + ".2" 
-                    neighborsAddressList.append([neighborAddress,neighbourAs])
+                    neighborsAddressList.append([neighborAddress,neighbourAs, client_ip, vrf_name])
                     ip += str(compteurLienAS) + ".1"      
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
@@ -135,17 +142,15 @@ for router in routers:
                     ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(val))
                 else:
                     neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".1" 
-                    neighborsAddressList.append([neighborAddress,neighbourAs])
+                    neighborsAddressList.append([neighborAddress,neighbourAs, client_ip, vrf_name])
                     ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".2" 
             
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
             res.write(f"interface {link['interface']}\n")
             
-            #VRF
-            if "vrf" in link:
-                vrf_name = link["vrf"]["name"]
-                res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
-                res.write(f" vrf forwarding {vrf_name}\n")
+            
+            res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
+            res.write(f" vrf forwarding {vrf_name}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
 
@@ -197,19 +202,24 @@ for router in routers:
         for egpNeighborsAddress in neighborsAddressList:
             res.write(f"  neighbor {egpNeighborsAddress[0]} activate\n")
     
-    res.write(" exit-address-family\n")
+    res.write(" exit-address-family\n"
+              " !\n")
 
-    # #VRF
-    # for vrf in vrfs:
-    #     res.write(f" address-family ipv4 vrf {vrf[0]}\n"
-    #               f" neighbor {} remote-as {}\n"
-    #               f" neighbor {} activate\n"
-    #               "exit-address-family\n"
-    #               "!\n")
+    #VRF
+    if isASBR:
+        for egpNeighborsAddress in neighborsAddressList:
+            vrf_name = egpNeighborsAddress[3]
+            client_ip = egpNeighborsAddress[2]
+            asNeighb = egpNeighborsAddress[1]
+            res.write(f" address-family ipv4 vrf {vrf_name}\n"
+                    f" neighbor {client_ip} remote-as {asNeighb}\n"
+                    f" neighbor {client_ip} activate\n"
+                    "exit-address-family\n"
+                    "!\n")
         
 
-    if isASBR:
-        res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n") # MODIF
+    # if isASBR:
+    #     res.write(f"ipv6 route {asPrefix[As]}:/48 Null0\n") # MODIF
     
     # IGP
                   
