@@ -66,7 +66,26 @@ for router in routers:
         os.makedirs(outputPath)
     res = open(f"{outputPath}/i{id}_startup-config.cfg", "w")
 
-    res.write("enable\nconf t\n")
+    #VRF
+    for adj in router["adj"]:
+        for link in adj["links"]:
+            if "vrf" in link:
+                vrf = link["vrf"]
+                vrf_name = vrf["name"]
+                vrf_rd = vrf["rd"]
+                vrf_rt = vrf["rt"]
+                if [vrf_name, vrf_rd, vrf_rt] not in vrfs:
+                    vrfs.append([vrf_name, vrf_rd, vrf_rt])
+                
+    for vrf in vrfs:
+        res.write(f"vrf definition {vrf[0]}\n"
+                  f" rd {vrf[1]}\n"
+                  f" route-target export {vrf[2]}\n"
+                  f" route-target import {vrf[2]}\n"
+                  " !\n"
+                  " address-family ipv4\n"
+                  " exit-address-family\n")
+                    
 
     #Interface de Loopback
     res.write("interface Loopback0\n"
@@ -123,10 +142,6 @@ for router in routers:
                       " no ip address\n")
             #VRF
             if "vrf" in link:
-                vrf = link["vrf"]
-                vrf_name = vrf["name"]
-                vrf_rd = vrf["rd"]
-                vrf_rt = vrf["rt"]
                 if [vrf_name, vrf_rd, vrf_rt] not in vrfs:
                     vrfs.append([vrf_name, vrf_rd, vrf_rt])
                     res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
@@ -142,16 +157,6 @@ for router in routers:
 
             res.write(f" mpls ip\n mpls label protocol ldp\n")
             res.write("!\n")
-    
-    #VRF
-    for vrf in vrfs:
-        res.write(f"vrf definition {vrf[0]}\n"
-                  f" rd {vrf[1]}\n"
-                  f" route-target export {vrf[2]}\n"
-                  f" route-target import {vrf[2]}\n"
-                  " !\n"
-                  " address-family ipv4\n"
-                  " exit-address-family\n")
     
     res.write("!\n")
     
@@ -195,12 +200,12 @@ for router in routers:
     res.write(" exit-address-family\n")
 
     #VRF
-    # for vrf in vrfs:
-    #     res.write(f" address-family ipv4 vrf {vrf[0]}\n"
-    #               f" neighbor {} remote-as {}\n"
-    #               f" neighbor {} activate\n"
-    #               "exit-address-family\n"
-    #               "!\n")
+    for vrf in vrfs:
+        res.write(f" address-family ipv4 vrf {vrf[0]}\n"
+                  f" neighbor {} remote-as {}\n"
+                  f" neighbor {} activate\n"
+                  "exit-address-family\n"
+                  "!\n")
         
 
     if isASBR:
