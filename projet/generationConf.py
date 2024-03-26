@@ -203,6 +203,13 @@ for router in routers:
     
     res.write(" exit-address-family\n"
               " !\n")
+    
+    if isASBR and "PEAdj" in router:
+        res.write(f" address-family vpnv4\n")
+        for adjID in router["PEAdj"]:
+            res.write(f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} activate\n"
+                      f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community extended\n")
+            
 
     #VRF
     if isASBR:
