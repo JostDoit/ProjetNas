@@ -125,7 +125,7 @@ for router in routers:
                 if link["protocol-type"] == "igp":
                     dicoSousRes[As].append(1)
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = len(dicoSousRes[As]), len(dicoSousRes[As])           
-                    ip += (str(len(dicoSousRes[As])) + ".0")
+                    ip += (str(len(dicoSousRes[As])) + ".1")
                 else:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
@@ -136,7 +136,7 @@ for router in routers:
                 if link["protocol-type"] == "igp":
                     val = dicoSousRes[As][matIdSousReseauxAs[id-1][neighbourID-1]-1]
                     dicoSousRes[As][matIdSousReseauxAs[id-1][neighbourID-1]-1] += 1
-                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(val))
+                    ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(val+1))
                 else:
                     neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".1" 
                     neighborsAddressList.append([neighborAddress,neighbourAs, vrf_name])
