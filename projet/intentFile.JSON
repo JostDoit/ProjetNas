@@ -201,7 +201,7 @@
             "as":64517,
             "adj":[
                 {
-                    "neighbor":2,
+                    "neighbor":4,
                     "links":[{
                         "interface":"GigabitEthernet1/0",
                         "protocol-type": "egp"
