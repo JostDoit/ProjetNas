@@ -213,7 +213,7 @@ for router in routers:
         res.write(f" address-family vpnv4\n")        
         for adjID in PEAdj:
             res.write(f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} activate\n"
-                      f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community extended\n")
+                      f"  neighbor {adjID}.{adjID}.{adjID}.{adjID} send-community both\n")
         res.write(" exit-address-family\n"
                   "!\n")
             
