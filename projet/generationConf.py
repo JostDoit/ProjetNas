@@ -84,7 +84,8 @@ for router in routers:
                   f" route-target import {vrf[2]}\n"
                   " !\n"
                   " address-family ipv4\n"
-                  " exit-address-family\n")
+                  " exit-address-family\n"
+                  "!\n")
                     
 
     #Interface de Loopback
@@ -138,13 +139,12 @@ for router in routers:
                     ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".2" 
             
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
-            res.write(f"interface {link['interface']}\n"
-                      " no ip address\n")
+            res.write(f"interface {link['interface']}\n")
+            
             #VRF
             if "vrf" in link:
-                if [vrf_name, vrf_rd, vrf_rt] not in vrfs:
-                    vrfs.append([vrf_name, vrf_rd, vrf_rt])
-                    res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
+                vrf_name = link["vrf"]["name"]
+                res.write(f" ip vrf {vrf_name}\n") # MODIF : utile ?
                 res.write(f" vrf forwarding {vrf_name}\n")
           
             res.write(f" ip address {ip} 255.255.255.252\n")
@@ -199,13 +199,13 @@ for router in routers:
     
     res.write(" exit-address-family\n")
 
-    #VRF
-    for vrf in vrfs:
-        res.write(f" address-family ipv4 vrf {vrf[0]}\n"
-                  f" neighbor {} remote-as {}\n"
-                  f" neighbor {} activate\n"
-                  "exit-address-family\n"
-                  "!\n")
+    # #VRF
+    # for vrf in vrfs:
+    #     res.write(f" address-family ipv4 vrf {vrf[0]}\n"
+    #               f" neighbor {} remote-as {}\n"
+    #               f" neighbor {} activate\n"
+    #               "exit-address-family\n"
+    #               "!\n")
         
 
     if isASBR:
