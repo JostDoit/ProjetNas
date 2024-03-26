@@ -104,8 +104,6 @@ for router in routers:
         for router in routers:
             if router["id"]==neighbourID:           
                 neighbourAs = router["as"]
-                if "client_ip" in router:
-                    client_ip = router["client_ip"]
         
         for link in adj["links"]:
             #Generation de l'addresse IP
@@ -133,7 +131,7 @@ for router in routers:
                     compteurLienAS += 1
                     matIdSousReseauxAs[id-1][neighbourID-1], matIdSousReseauxAs[neighbourID-1][id-1] = compteurLienAS, compteurLienAS
                     neighborAddress = ip + str(compteurLienAS) + ".2" 
-                    neighborsAddressList.append([neighborAddress,neighbourAs, client_ip, vrf_name])
+                    neighborsAddressList.append([neighborAddress,neighbourAs, vrf_name])
                     ip += str(compteurLienAS) + ".1"      
             else: # sous reseau deja cree
                 if link["protocol-type"] == "igp":
@@ -142,7 +140,7 @@ for router in routers:
                     ip += (str(matIdSousReseauxAs[id-1][neighbourID-1]) + "." + str(val))
                 else:
                     neighborAddress = ip + str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".1" 
-                    neighborsAddressList.append([neighborAddress,neighbourAs, client_ip, vrf_name])
+                    neighborsAddressList.append([neighborAddress,neighbourAs, vrf_name])
                     ip += str(matIdSousReseauxAs[id-1][neighbourID-1]) + ".2" 
             
             #Ecriture de l'interface et de son adresse IP dans le fichier de configuration
@@ -208,12 +206,12 @@ for router in routers:
     #VRF
     if isASBR:
         for egpNeighborsAddress in neighborsAddressList:
-            vrf_name = egpNeighborsAddress[3]
-            client_ip = egpNeighborsAddress[2]
+            ipNeighb = egpNeighborsAddress[0]
             asNeighb = egpNeighborsAddress[1]
+            vrf_name = egpNeighborsAddress[2]
             res.write(f" address-family ipv4 vrf {vrf_name}\n"
-                    f" neighbor {client_ip} remote-as {asNeighb}\n"
-                    f" neighbor {client_ip} activate\n"
+                    f" neighbor {ipNeighb} remote-as {asNeighb}\n"
+                    f" neighbor {ipNeighb} activate\n"
                     "exit-address-family\n"
                     "!\n")
         
