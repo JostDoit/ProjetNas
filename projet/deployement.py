@@ -1,7 +1,7 @@
 import os, shutil
 
 configDir = "./configRouteur"
-dynamipsDir = "../../GNS3/project-files/dynamips"
+dynamipsDir = "../../GNS3/project-files/dynamips" # Mettre le chemin vers le projet GNS3 correspondant
 
 routersDir = []
 
